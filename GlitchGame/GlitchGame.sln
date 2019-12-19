@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlitchGame.System", "GlitchGame.System.csproj", "{D3F2917A-015A-4B0D-A13F-CD6C2C9D7021}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlitchGame.Engine", "..\GlitchGame.Engine\GlitchGame.Engine.csproj", "{320AD0DF-14DB-42AD-B0F5-E1780641F30C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlitchGame.MonoGame", "..\GlitchGame.MonoGame\GlitchGame.MonoGame.csproj", "{281CDF23-C22F-4C66-9190-0B3002758E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlitchGame.Tests", "..\GlitchGame.Tests\GlitchGame.Tests.csproj", "{DB876640-5EAC-452D-809F-80E29D400E5E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3F2917A-015A-4B0D-A13F-CD6C2C9D7021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F2917A-015A-4B0D-A13F-CD6C2C9D7021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F2917A-015A-4B0D-A13F-CD6C2C9D7021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F2917A-015A-4B0D-A13F-CD6C2C9D7021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{320AD0DF-14DB-42AD-B0F5-E1780641F30C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{320AD0DF-14DB-42AD-B0F5-E1780641F30C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{320AD0DF-14DB-42AD-B0F5-E1780641F30C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{320AD0DF-14DB-42AD-B0F5-E1780641F30C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{281CDF23-C22F-4C66-9190-0B3002758E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{281CDF23-C22F-4C66-9190-0B3002758E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{281CDF23-C22F-4C66-9190-0B3002758E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{281CDF23-C22F-4C66-9190-0B3002758E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB876640-5EAC-452D-809F-80E29D400E5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB876640-5EAC-452D-809F-80E29D400E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB876640-5EAC-452D-809F-80E29D400E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB876640-5EAC-452D-809F-80E29D400E5E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {689DA627-876D-4607-9E14-4F45A04F2674}
+	EndGlobalSection
+EndGlobal

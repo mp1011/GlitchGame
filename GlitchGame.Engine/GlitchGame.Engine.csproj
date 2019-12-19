@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{320AD0DF-14DB-42AD-B0F5-E1780641F30C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GlitchGame.Engine</RootNamespace>
+    <AssemblyName>GlitchGame.Engine</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\BackgroundLayers.cs" />
+    <Compile Include="Data\Coordinate.cs" />
+    <Compile Include="Data\Coordinates.cs" />
+    <Compile Include="Data\GeneralData.cs" />
+    <Compile Include="Data\PaletteIndex.cs" />
+    <Compile Include="Data\TileGrid.cs" />
+    <Compile Include="Data\ScrollSpeed.cs" />
+    <Compile Include="Data\Sprite.cs" />
+    <Compile Include="Data\SpriteGroup.cs" />
+    <Compile Include="Data\UILayer.cs" />
+    <Compile Include="Data\ScreenLayout.cs" />
+    <Compile Include="Extensions\BitExtensions.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Data\Bit.cs" />
+    <Compile Include="Data\BitBlockArray.cs" />
+    <Compile Include="Data\BitBlockGrid.cs" />
+    <Compile Include="Data\BitBlockSequence.cs" />
+    <Compile Include="Data\Color.cs" />
+    <Compile Include="Data\ColorChannel.cs" />
+    <Compile Include="Data\IBitBlock.cs" />
+    <Compile Include="Data\BackgroundLayer.cs" />
+    <Compile Include="Data\LayerData.cs" />
+    <Compile Include="Data\Palette.cs" />
+    <Compile Include="Data\PaletteTable.cs" />
+    <Compile Include="Data\Pixel.cs" />
+    <Compile Include="Data\RAM.cs" />
+    <Compile Include="Data\VRAMTileData.cs" />
+    <Compile Include="Data\TileDefinition.cs" />
+    <Compile Include="Data\TileIndex.cs" />
+    <Compile Include="Data\TileMap.cs" />
+    <Compile Include="Data\TileRowIndex.cs" />
+    <Compile Include="Data\VRAM.cs" />
+    <Compile Include="Extensions\ArrayExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
