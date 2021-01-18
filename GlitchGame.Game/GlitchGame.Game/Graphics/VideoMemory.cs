@@ -8,14 +8,14 @@
 
         public Sprite Sprite { get; }
 
-        public TileMap ScreenTiles { get; }
+        public TileLayer BgLayer { get; }
 
         public VideoMemory(PaletteGroup paletteGroup, TileSet tiles, Sprite sprite)
         {
             Palettes = paletteGroup;
             Tiles = tiles;
             Sprite = sprite;
-            ScreenTiles = new TileMap(0, 0, new TileIndex[960], 32);
+            BgLayer = new TileLayer();
         }
     }
 }

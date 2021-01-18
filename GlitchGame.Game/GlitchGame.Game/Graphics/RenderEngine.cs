@@ -48,22 +48,25 @@ namespace GlitchGame.GameMain.Graphics
 
         private void DrawNextPixel()
         {
-            _renderGun.Palette = 0;
-            _renderGun.Color = 0;
+            _renderGun.Palette = _videoMemory.BgLayer.Palette;
+            _renderGun.Color = _videoMemory.BgLayer.GetColorAtScreenPoint(_videoMemory.Tiles, _renderGun.X, _renderGun.Y);
 
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 if (_scanlineSprites[i] != null && _scanlineSprites[i].HitTest(_renderGun.X, _renderGun.Y))
                 {
-                    _renderGun.Palette = _scanlineSprites[i].Palette;
-                    _renderGun.Color = _scanlineSprites[i].GetColorAtScreenPoint(_videoMemory.Tiles, _renderGun.X, _renderGun.Y);
-                    break;
+                    var color = _scanlineSprites[i].GetColorAtScreenPoint(_videoMemory.Tiles, _renderGun.X, _renderGun.Y);
+                    if (color.Value > 0)
+                    {
+                        _renderGun.Palette = _scanlineSprites[i].Palette;
+                        _renderGun.Color = color;
+                        break;
+                    }
                 }
             }
 
             var srcPixel = GetNextSourcePixel();
             var screenPixel = GetNextScreenPixel();
-
             _spriteBatch.Draw(_systemPalette, screenPixel, srcPixel, Color.White);
         }
 
@@ -73,6 +76,9 @@ namespace GlitchGame.GameMain.Graphics
                 .Get(_renderGun.Palette)
                 .Get(_renderGun.Color);
 
+            if (color.Value == 0)
+                return Rectangle.Empty;
+
             var srcPoint = color.Value.IndexToPoint(16);
             return srcPoint.ToRectangle(32);
         }
@@ -80,7 +86,7 @@ namespace GlitchGame.GameMain.Graphics
         private Rectangle GetNextScreenPixel()
         {
             return new Point(_renderGun.X, _renderGun.Y)
-                .ToRectangle(16);
+                .ToRectangle(4); //todo, scale to screen size
         }
     }
 
