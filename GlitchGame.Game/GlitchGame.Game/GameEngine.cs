@@ -13,13 +13,22 @@ namespace GlitchGame.GameMain
         private GraphicsDeviceManager _graphics;
         private RenderEngine _renderEngine;
         private SystemMemory _systemMemory;
+        private RenderTarget2D _renderTarget;
 
         public GameEngine()
         {
             _graphics = new GraphicsDeviceManager(this);
-
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += Window_ClientSizeChanged;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+        }
+
+        private void Window_ClientSizeChanged(object sender, EventArgs e)
+        {
+            _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+            _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+            _graphics.ApplyChanges();
         }
 
         protected override void Initialize()
@@ -67,11 +76,19 @@ namespace GlitchGame.GameMain
             _systemMemory.VideoMemory.BgLayer.Palette = 1;
             _systemMemory.VideoMemory.BgLayer.TileMap.SetAll(3);
 
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(0, 0, 4);
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(1, 1, 4);
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(2, 2, 4);
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(3, 3, 4);
 
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 960;
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 0, 4);
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 1, 4);
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 2, 4);
+
+
+            _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+            _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
             _graphics.ApplyChanges();
-
         }
 
         private Random _rng = new Random(100);
@@ -102,6 +119,8 @@ namespace GlitchGame.GameMain
             _renderEngine = new RenderEngine(
                 spriteBatch: new SpriteBatch(GraphicsDevice),
                 systemPalette: Content.Load<Texture2D>("palette"));
+
+            _renderTarget = new RenderTarget2D(GraphicsDevice, SystemConstants.ScreenPixelWidth, SystemConstants.ScreenPixelHeight);
         }
 
         protected override void Update(GameTime gameTime)
@@ -119,8 +138,17 @@ namespace GlitchGame.GameMain
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.SetRenderTarget(_renderTarget);
             _renderEngine.RenderFrame(_systemMemory.VideoMemory);
+
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.Black);
+            _renderEngine.SpriteBatch.Begin();
+            _renderEngine.SpriteBatch.Draw(_renderTarget, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+                new Rectangle(0, 0, SystemConstants.ScreenPixelWidth, SystemConstants.ScreenPixelHeight), Color.White);
+            _renderEngine.SpriteBatch.End();
+
             base.Draw(gameTime);
         }
     }

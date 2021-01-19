@@ -98,6 +98,11 @@ namespace GlitchGame.GameMain.Graphics
                 Tiles[i] = tile;
         }
 
+        public void Set(int x, int y, TileIndex tile)
+        {
+            Tiles.SetFromCoordinates(x, y, Columns, tile);
+        }
+
         public Value4 GetColorAtPoint(TileSet tileSet, int pixelX, int pixelY)
         {
             int tileX = 0, tileY = 0;

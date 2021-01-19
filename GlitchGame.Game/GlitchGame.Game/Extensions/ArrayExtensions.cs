@@ -10,5 +10,10 @@ namespace GlitchGame.GameMain.Extensions
         {
             return array[(y * columns) + x];
         }
+
+        public static void SetFromCoordinates<T>(this T[] array, int x, int y, int columns, T value)
+        {
+            array[(y * columns) + x] = value;
+        }
     }
 }

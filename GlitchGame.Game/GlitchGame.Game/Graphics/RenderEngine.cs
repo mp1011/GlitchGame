@@ -2,20 +2,22 @@
 using GlitchGame.GameMain.Memory;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace GlitchGame.GameMain.Graphics
 {
     public class RenderEngine
     {
-        private readonly SpriteBatch _spriteBatch;
+        public SpriteBatch SpriteBatch { get; }
         private readonly Texture2D _systemPalette;
         private readonly RenderGun _renderGun;
         private VideoMemory _videoMemory;
         Sprite[] _scanlineSprites = new Sprite[8];
 
+
         public RenderEngine(SpriteBatch spriteBatch, Texture2D systemPalette)
         {
-            _spriteBatch = spriteBatch;
+            SpriteBatch = spriteBatch;
             _systemPalette = systemPalette;
             _renderGun = new RenderGun();
         }
@@ -23,7 +25,7 @@ namespace GlitchGame.GameMain.Graphics
         public void RenderFrame(VideoMemory videoMemory)
         {
             _videoMemory = videoMemory;
-            _spriteBatch.Begin();
+            SpriteBatch.Begin();
 
             do
             {
@@ -34,7 +36,7 @@ namespace GlitchGame.GameMain.Graphics
                 _renderGun.Move();
             } while (_renderGun.Y != 0 || _renderGun.X != 0);
 
-            _spriteBatch.End();
+            SpriteBatch.End();
         }
 
         private void GetSpritesOnCurrentScanline()
@@ -67,7 +69,7 @@ namespace GlitchGame.GameMain.Graphics
 
             var srcPixel = GetNextSourcePixel();
             var screenPixel = GetNextScreenPixel();
-            _spriteBatch.Draw(_systemPalette, screenPixel, srcPixel, Color.White);
+            SpriteBatch.Draw(_systemPalette, screenPixel, srcPixel, Color.White);
         }
 
         private Rectangle GetNextSourcePixel()
@@ -86,7 +88,7 @@ namespace GlitchGame.GameMain.Graphics
         private Rectangle GetNextScreenPixel()
         {
             return new Point(_renderGun.X, _renderGun.Y)
-                .ToRectangle(4); //todo, scale to screen size
+                .ToRectangle(1); 
         }
     }
 
