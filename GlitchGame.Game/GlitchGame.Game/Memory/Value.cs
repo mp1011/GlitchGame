@@ -45,5 +45,9 @@ namespace GlitchGame.GameMain.Memory
 
         public static implicit operator byte(Value64 i) =>i.Value;
         public static implicit operator Value64(byte b) => new Value64(b);
+
+        public static implicit operator int(Value64 i) => i.Value;
+        public static implicit operator Value64(int b) => new Value64((byte)b);
+
     }
 }

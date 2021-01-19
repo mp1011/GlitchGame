@@ -6,15 +6,15 @@
 
         public TileSet Tiles { get; }
 
-        public Sprite Sprite { get; }
+        public SpriteTable Sprites { get; }
 
         public TileLayer BgLayer { get; }
 
-        public VideoMemory(PaletteGroup paletteGroup, TileSet tiles, Sprite sprite)
+        public VideoMemory(PaletteGroup paletteGroup, TileSet tiles)
         {
             Palettes = paletteGroup;
             Tiles = tiles;
-            Sprite = sprite;
+            Sprites = new SpriteTable();
             BgLayer = new TileLayer();
         }
     }

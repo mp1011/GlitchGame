@@ -5,6 +5,27 @@ using System.Text;
 
 namespace GlitchGame.GameMain.Graphics
 {
+    public class SpriteTable
+    {
+        public Sprite[] Sprites { get; }
+
+        public int MaxSprites => Sprites.Length;
+
+        public SpriteTable()
+        {
+            Sprites = new Sprite[64];
+        }
+
+        public void Set(Value64 index, Sprite s)
+        {
+            Sprites[index] = s;
+        }
+
+        public Sprite Get(Value64 index)
+        {
+            return Sprites[index];
+        }
+    }
 
     public class Sprite
     {

@@ -1,4 +1,5 @@
-﻿using GlitchGame.GameMain.Graphics;
+﻿using GlitchGame.GameMain.GameLogic;
+using GlitchGame.GameMain.Graphics;
 using GlitchGame.GameMain.Memory;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,6 +15,7 @@ namespace GlitchGame.GameMain
         private RenderEngine _renderEngine;
         private SystemMemory _systemMemory;
         private RenderTarget2D _renderTarget;
+        private GameLogicController _gameLogicController;
 
         public GameEngine()
         {
@@ -48,13 +50,13 @@ namespace GlitchGame.GameMain
                         new Palette(12, 13, 14, 15)),
                      new TileSet(
                          new Tile("00000000",
-                                  "00000000",
-                                  "00000000",
-                                  "00000000",
-                                  "00011122",
-                                  "00011122",
+                                  "00001111",
                                   "00011111",
-                                  "00011111"),
+                                  "00111111",
+                                  "01011122",
+                                  "11111222",
+                                  "11111222",
+                                  "11111222"),
                          new Tile(SolidTile(1)),
                          new Tile(SolidTile(2)),
                          new Tile("01010101",
@@ -68,10 +70,33 @@ namespace GlitchGame.GameMain
                          new Tile(RandomTile()),
                          new Tile(RandomTile()),
                          new Tile(RandomTile()),
-                         new Tile(RandomTile())),
-                     new Sprite(0, new TileIndex(0, Flip.Normal),
+                         new Tile(RandomTile()))
+                     ));
+
+            _systemMemory.VideoMemory.Sprites.Set(0, new Sprite(0, new TileIndex(0, Flip.Normal),
+                                       new TileIndex(0, Flip.FlipX),
+                                       new TileIndex(0, Flip.FlipY),
+                                       new TileIndex(0, Flip.FlipBoth)
+                                       ));
+
+            _systemMemory.VideoMemory.Sprites.Set(1, new Sprite(0, new TileIndex(0, Flip.Normal),
+                                      new TileIndex(0, Flip.FlipX),
+                                      new TileIndex(0, Flip.FlipY),
+                                      new TileIndex(0, Flip.FlipBoth)
+                                      ));
+
+            _systemMemory.VideoMemory.Sprites.Set(2, new Sprite(0, new TileIndex(0, Flip.Normal),
+                                     new TileIndex(0, Flip.FlipX),
+                                     new TileIndex(0, Flip.FlipY),
+                                     new TileIndex(0, Flip.FlipBoth)
+                                     ));
+
+            _systemMemory.VideoMemory.Sprites.Set(3, new Sprite(0, new TileIndex(0, Flip.Normal),
                                    new TileIndex(0, Flip.FlipX),
-                                   1, 2)));
+                                   new TileIndex(0, Flip.FlipY),
+                                   new TileIndex(0, Flip.FlipBoth)
+                                   ));
+
 
             _systemMemory.VideoMemory.BgLayer.Palette = 1;
             _systemMemory.VideoMemory.BgLayer.TileMap.SetAll(3);
@@ -89,6 +114,8 @@ namespace GlitchGame.GameMain
             _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
             _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
             _graphics.ApplyChanges();
+
+            _gameLogicController = new GameLogicController(_systemMemory);
         }
 
         private Random _rng = new Random(100);
@@ -128,10 +155,7 @@ namespace GlitchGame.GameMain
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            _systemMemory.VideoMemory.Sprite.X++;
-            if (_systemMemory.VideoMemory.Sprite.X > 64)
-                _systemMemory.VideoMemory.Sprite.X = 0;
-
+            _gameLogicController.UpdateFrame();
 
             base.Update(gameTime);
         }
