@@ -1,4 +1,5 @@
-﻿using GlitchGame.GameMain.Memory;
+﻿using GlitchGame.GameMain.Extensions;
+using GlitchGame.GameMain.Memory;
 
 namespace GlitchGame.GameMain.GameLogic
 {
@@ -6,6 +7,7 @@ namespace GlitchGame.GameMain.GameLogic
     {
         private readonly SystemMemory _systemMemory;
         private BouncingBall[] _bouncingBalls;
+        private ScrollingSprite _scrollingSprite;
 
         public GameLogicController(SystemMemory systemMemory)
         {
@@ -34,12 +36,22 @@ namespace GlitchGame.GameMain.GameLogic
 
             _bouncingBalls[3].XSpeed = 130;
             _bouncingBalls[3].YSpeed = 125;
+
+            _scrollingSprite = new ScrollingSprite();
+            _scrollingSprite.SpriteIndex = 4;
+            _scrollingSprite.WorldX = 100;
+            _scrollingSprite.WorldY = 100;
         }
 
         public void UpdateFrame()
         {
+            _systemMemory.VideoMemory.BgLayer.XOffset = _systemMemory.VideoMemory.BgLayer.XOffset.Increment(1);
+         //   _systemMemory.VideoMemory.BgLayer.YOffset = _systemMemory.VideoMemory.BgLayer.YOffset.Increment(-1);
+
             for (int i = 0; i < _bouncingBalls.Length; i++)
                 _bouncingBalls[i].Update(_systemMemory);
+
+            _scrollingSprite.Update(_systemMemory);
         }
     }
 }

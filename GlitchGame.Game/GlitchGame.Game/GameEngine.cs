@@ -98,6 +98,14 @@ namespace GlitchGame.GameMain
                                    ));
 
 
+            _systemMemory.VideoMemory.Sprites.Set(4, new Sprite(0, 
+                              new TileIndex(0, Flip.FlipBoth),
+                              new TileIndex(0, Flip.FlipY),
+                              new TileIndex(0, Flip.FlipX),
+                              new TileIndex(0, Flip.Normal)
+                              ));
+
+
             _systemMemory.VideoMemory.BgLayer.Palette = 1;
             _systemMemory.VideoMemory.BgLayer.TileMap.SetAll(3);
 
@@ -106,9 +114,15 @@ namespace GlitchGame.GameMain
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(2, 2, 4);
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(3, 3, 4);
 
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 0, 4);
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 1, 4);
+            _systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 2, 4);
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 0, 4);
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 1, 4);
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 2, 4);
+
+
+
 
 
             _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
@@ -155,6 +169,7 @@ namespace GlitchGame.GameMain
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            _systemMemory.Clock++;
             _gameLogicController.UpdateFrame();
 
             base.Update(gameTime);
@@ -164,7 +179,7 @@ namespace GlitchGame.GameMain
         {
             GraphicsDevice.Clear(Color.Black);
             GraphicsDevice.SetRenderTarget(_renderTarget);
-            _renderEngine.RenderFrame(_systemMemory.VideoMemory);
+            _renderEngine.RenderFrame(_systemMemory);
 
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);

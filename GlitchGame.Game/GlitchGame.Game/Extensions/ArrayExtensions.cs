@@ -8,7 +8,7 @@ namespace GlitchGame.GameMain.Extensions
     {
         public static T GetFromCoordinates<T>(this T[] array, int x, int y, int columns)
         {
-            return array[(y * columns) + x];
+            return array[((y * columns) + x).WrapInt(array.Length)];
         }
 
         public static void SetFromCoordinates<T>(this T[] array, int x, int y, int columns, T value)

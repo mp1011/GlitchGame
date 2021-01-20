@@ -11,7 +11,7 @@ namespace GlitchGame.GameMain.Graphics
         public SpriteBatch SpriteBatch { get; }
         private readonly Texture2D _systemPalette;
         private readonly RenderGun _renderGun;
-        private VideoMemory _videoMemory;
+        private SystemMemory _systemMemory;
         Sprite[] _scanlineSprites = new Sprite[4];
 
 
@@ -22,9 +22,9 @@ namespace GlitchGame.GameMain.Graphics
             _renderGun = new RenderGun();
         }
 
-        public void RenderFrame(VideoMemory videoMemory)
+        public void RenderFrame(SystemMemory systemMemory)
         {
-            _videoMemory = videoMemory;
+            _systemMemory = systemMemory;
             SpriteBatch.Begin();
 
             do
@@ -43,9 +43,9 @@ namespace GlitchGame.GameMain.Graphics
         {
             int scanlineSpriteIndex = 0;
 
-            for (int i = 0; i < _videoMemory.Sprites.MaxSprites; i++)
+            for (int i = 0; i < _systemMemory.VideoMemory.Sprites.MaxSprites; i++)
             {
-                var sprite = _videoMemory.Sprites.Get(i);
+                var sprite = _systemMemory.VideoMemory.Sprites.Get(i);
                 if(sprite != null && _renderGun.Y >= sprite.Y && _renderGun.Y < sprite.Y + sprite.Height)
                 {
                     _scanlineSprites[scanlineSpriteIndex] = sprite;
@@ -60,14 +60,17 @@ namespace GlitchGame.GameMain.Graphics
 
         private void DrawNextPixel()
         {
-            _renderGun.Palette = _videoMemory.BgLayer.Palette;
-            _renderGun.Color = _videoMemory.BgLayer.GetColorAtScreenPoint(_videoMemory.Tiles, _renderGun.X, _renderGun.Y);
+            var renderGunX = _renderGun.X;
+            var renderGunY = _renderGun.Y;
+
+            _renderGun.Palette = _systemMemory.VideoMemory.BgLayer.Palette;
+            _renderGun.Color = _systemMemory.VideoMemory.BgLayer.GetColorAtScreenPoint(_systemMemory.VideoMemory.Tiles, renderGunX, renderGunY);
 
             for (int i = 0; i < _scanlineSprites.Length; i++)
             {
-                if (_scanlineSprites[i] != null && _scanlineSprites[i].HitTest(_renderGun.X, _renderGun.Y))
+                if (_scanlineSprites[i] != null && _scanlineSprites[i].HitTest(renderGunX, renderGunY))
                 {
-                    var color = _scanlineSprites[i].GetColorAtScreenPoint(_videoMemory.Tiles, _renderGun.X, _renderGun.Y);
+                    var color = _scanlineSprites[i].GetColorAtScreenPoint(_systemMemory.VideoMemory.Tiles, renderGunX, renderGunY);
                     if (color.Value > 0)
                     {
                         _renderGun.Palette = _scanlineSprites[i].Palette;
@@ -84,7 +87,7 @@ namespace GlitchGame.GameMain.Graphics
 
         private Rectangle GetNextSourcePixel()
         {
-            var color =_videoMemory.Palettes
+            var color = _systemMemory.VideoMemory.Palettes
                 .Get(_renderGun.Palette)
                 .Get(_renderGun.Color);
 

@@ -6,6 +6,8 @@ namespace GlitchGame.GameMain.Memory
     {
         public VideoMemory VideoMemory { get; }
 
+        public int Clock { get; set; } //todo
+
         public SystemMemory(VideoMemory videoMemory)
         {
             VideoMemory = videoMemory;

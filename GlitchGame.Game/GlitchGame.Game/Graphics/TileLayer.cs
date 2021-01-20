@@ -13,13 +13,13 @@ namespace GlitchGame.GameMain.Graphics
 
         public TileLayer()
         {
-            TileMap = new TileMap(0, 0, new TileIndex[3840], 32);
+            TileMap = new TileMap(0, 0, new TileIndex[3840*2], 64);
         }
 
         public Value4 GetColorAtScreenPoint(TileSet tileSet, byte screenX, byte screenY)
         {
-            var x = screenX - XOffset;
-            var y = screenY - YOffset;
+            var x = screenX + XOffset;
+            var y = screenY + YOffset;
             return TileMap.GetColorAtPoint(tileSet, x, y);
         }
     }
