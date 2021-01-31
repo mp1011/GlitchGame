@@ -41,11 +41,12 @@ namespace GlitchGame.GameMain
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromMilliseconds(33);
 
+            SystemBinaryData.SetIOPointer(2,0); //todo
             _systemMemory = new SystemMemory(
                 new VideoMemory(
                     new PaletteGroup(
                         new Palette(0, 5, 9, 12),
-                        new Palette(25, 26, 27, 28),
+                        new Palette(1, 4, 8, 12),
                         new Palette(8, 9, 10, 11),
                         new Palette(12, 13, 14, 15)),
                      new TileSet(
@@ -57,56 +58,35 @@ namespace GlitchGame.GameMain
                                   "11111222",
                                   "11111222",
                                   "11111222"),
-                         new Tile(SolidTile(1)),
                          new Tile(SolidTile(2)),
-                         new Tile("01010101",
-                                  "10101010",
-                                  "01022101",
-                                  "10122010",
-                                  "01022101",
-                                  "101221010",
-                                  "01010101",
-                                  "10101010"),                                  
+                         new Tile(SolidTile(3)),
+                         new Tile("11001100",
+                                  "11001100",
+                                  "00110011",
+                                  "00110011",
+                                  "11001100",
+                                  "11001100",
+                                  "00110011",
+                                  "00110011"),                                  
                          new Tile(RandomTile()),
                          new Tile(RandomTile()),
                          new Tile(RandomTile()),
                          new Tile(RandomTile()))
                      ));
 
-            _systemMemory.VideoMemory.Sprites.Set(0, new Sprite(0, new TileIndex(0, Flip.Normal),
-                                       new TileIndex(0, Flip.FlipX),
-                                       new TileIndex(0, Flip.FlipY),
-                                       new TileIndex(0, Flip.FlipBoth)
-                                       ));
-
-            _systemMemory.VideoMemory.Sprites.Set(1, new Sprite(0, new TileIndex(0, Flip.Normal),
-                                      new TileIndex(0, Flip.FlipX),
-                                      new TileIndex(0, Flip.FlipY),
-                                      new TileIndex(0, Flip.FlipBoth)
-                                      ));
-
-            _systemMemory.VideoMemory.Sprites.Set(2, new Sprite(0, new TileIndex(0, Flip.Normal),
-                                     new TileIndex(0, Flip.FlipX),
-                                     new TileIndex(0, Flip.FlipY),
-                                     new TileIndex(0, Flip.FlipBoth)
-                                     ));
-
-            _systemMemory.VideoMemory.Sprites.Set(3, new Sprite(0, new TileIndex(0, Flip.Normal),
-                                   new TileIndex(0, Flip.FlipX),
-                                   new TileIndex(0, Flip.FlipY),
-                                   new TileIndex(0, Flip.FlipBoth)
-                                   ));
+            for (int i = 0; i < _systemMemory.VideoMemory.Sprites.Length; i++)
+            {
+                _systemMemory.VideoMemory.Sprites.SetWritePointer(i);
+                new Sprite(new SpriteTiles(
+                                       new TileIndex(new ByteValue(0), Flip.Normal),
+                                       new TileIndex(new ByteValue(0), Flip.FlipX),
+                                       new TileIndex(new ByteValue(0), Flip.FlipY),
+                                       new TileIndex(new ByteValue(0), Flip.FlipBoth)
+                                   ), new ByteValue(128), new ByteValue((byte)(32*i)), new SpriteAttributes(new Value2(0), new Value2(0), new Value4(0)));
+            }
 
 
-            _systemMemory.VideoMemory.Sprites.Set(4, new Sprite(0, 
-                              new TileIndex(0, Flip.FlipBoth),
-                              new TileIndex(0, Flip.FlipY),
-                              new TileIndex(0, Flip.FlipX),
-                              new TileIndex(0, Flip.Normal)
-                              ));
-
-
-            _systemMemory.VideoMemory.BgLayer.Palette = 1;
+            _systemMemory.VideoMemory.BgLayer.Palette = new Value2(1);
             _systemMemory.VideoMemory.BgLayer.TileMap.SetAll(3);
 
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(0, 0, 4);
@@ -114,14 +94,12 @@ namespace GlitchGame.GameMain
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(2, 2, 4);
             _systemMemory.VideoMemory.BgLayer.TileMap.Set(3, 3, 4);
 
-            _systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 0, 4);
-            _systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 1, 4);
-            _systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 2, 4);
-            _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 0, 4);
-            _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 1, 4);
-            _systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 2, 4);
-
-
+            //_systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 0, 4);
+            //_systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 1, 4);
+            //_systemMemory.VideoMemory.BgLayer.TileMap.Set(30, 2, 4);
+            //_systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 0, 4);
+            //_systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 1, 4);
+            //_systemMemory.VideoMemory.BgLayer.TileMap.Set(31, 2, 4);
 
 
 
@@ -169,7 +147,16 @@ namespace GlitchGame.GameMain
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            _systemMemory.Clock++;
+            var clock = _systemMemory.Clock;
+            if (clock[1] < 255)
+                clock[1]++;
+            else
+            {
+                clock[0]++;
+                clock[1] = 0;
+            }
+            _systemMemory.Clock = clock;
+
             _gameLogicController.UpdateFrame();
 
             base.Update(gameTime);

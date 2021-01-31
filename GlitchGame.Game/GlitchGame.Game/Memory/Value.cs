@@ -2,52 +2,95 @@
 
 namespace GlitchGame.GameMain.Memory
 {
-    public struct Value4
+    public class AlignedByteValue : ByteValue
     {
+        public AlignedByteValue() : base(true) { }
+
+        public AlignedByteValue(byte value) : base(value,true)
+        {
+        }
+    }
+    
+    public class ByteValue : IDataBlock
+    {
+        public int Address { get; }
         public byte Value { get; }
 
-        public Value4(byte value)
+        public virtual int BitWidth => 8;
+
+        public ByteValue() : this(false)
         {
-            Value = value;
-            if (value >= 4)
-                throw new Exception("Overflow");
+
         }
 
-        public static implicit operator byte(Value4 i) => i.Value;
-        public static implicit operator Value4(byte b) => new Value4(b);
+        public ByteValue(bool aligned)
+        {
+            if (aligned)
+                SystemBinaryData.AlignToByte();
+
+            Address = SystemBinaryData.IOPointer;
+            var oldBitOffset = SystemBinaryData.BitOffset;
+            Value = SystemBinaryData.ReadBits(BitWidth);
+
+           // System.Diagnostics.Debug.WriteLine($"R\t{Address}\t{oldBitOffset}\t{BitWidth}\t{Value}");
+        }
+
+        public ByteValue(byte value) : this (value,false)
+        {
+        }
+
+        public ByteValue(byte value, bool aligned)
+        {
+            if (aligned)
+                SystemBinaryData.AlignToByte();
+
+            Address = SystemBinaryData.IOPointer;
+            Value = value;
+            
+            if(value >= Math.Pow(2, BitWidth))
+                throw new Exception("Overflow");
+
+           // System.Diagnostics.Debug.WriteLine($"W\t{SystemBinaryData.IOPointer}\t{SystemBinaryData.BitOffset}\t{BitWidth}\t{Value}");
+
+            SystemBinaryData.WriteBits(BitWidth, value);      
+        }
+    }
+    public class Value2 : ByteValue
+    {
+        public Value2(byte value) : base(value)
+        {
+        }
+
+        public Value2() : base()
+        {
+        }
+
+        public override int BitWidth => 2;
     }
 
-    public struct Value8
+    public class Value4 : ByteValue
     {
-        public byte Value { get; }
-
-        public Value8(byte value)
+        public Value4(byte value) : base(value)
         {
-            Value = value;
-            if (value >= 8)
-                throw new Exception("Overflow");
         }
 
-        public static implicit operator byte(Value8 i) => i.Value;
-        public static implicit operator Value8(byte b) => new Value8(b);
+        public Value4() : base()
+        {
+        }
+
+        public override int BitWidth => 4;
     }
 
-    public struct Value64 
+    public class Value6 : ByteValue
     {
-        public byte Value { get; }
-
-        public Value64(byte offset)
+        public Value6(byte value) : base(value)
         {
-            Value = offset;
-            if (offset >= 64)
-                throw new Exception("Overflow");
         }
 
-        public static implicit operator byte(Value64 i) =>i.Value;
-        public static implicit operator Value64(byte b) => new Value64(b);
+        public Value6() : base()
+        {
+        }
 
-        public static implicit operator int(Value64 i) => i.Value;
-        public static implicit operator Value64(int b) => new Value64((byte)b);
-
+        public override int BitWidth => 6;
     }
 }

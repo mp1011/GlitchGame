@@ -1,4 +1,6 @@
-﻿namespace GlitchGame.GameMain.Graphics
+﻿using GlitchGame.GameMain.Memory;
+
+namespace GlitchGame.GameMain.Graphics
 {
     public class VideoMemory
     {
@@ -14,7 +16,7 @@
         {
             Palettes = paletteGroup;
             Tiles = tiles;
-            Sprites = new SpriteTable();
+            Sprites = new SpriteTable(Sprite.CreateDefault());
             BgLayer = new TileLayer();
         }
     }

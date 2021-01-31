@@ -2,33 +2,35 @@
 
 namespace GlitchGame.GameMain.Graphics
 {
-    public struct Palette
+    public class Palette : Sequence<Value6>
     {
-        public Value64[] Colors { get; }
-
-        public Palette(Value64 color1, Value64 color2, Value64 color3, Value64 color4)
+        public override int Length => 4;
+        public Palette(byte color1, byte color2, byte color3, byte color4) 
+            : this(new Value6(color1), new Value6(color2), new Value6(color3), new Value6(color4))
         {
-            Colors = new Value64[4] { color1, color2, color3, color4 };
         }
 
-        public Value64 Get(Value4 value)
+        private Palette(Value6 color1, Value6 color2, Value6 color3, Value6 color4) : base(color1)
         {
-            return Colors[value];
+        }
+
+        public Palette() : this(new Value6(), new Value6(), new Value6(), new Value6())
+        {
         }
     }
 
-    public struct PaletteGroup
+    public class PaletteGroup : Sequence<Palette>
     {
-        public Palette[] Palettes { get; }
+        public override int Length => 4;
 
-        public PaletteGroup(Palette p1, Palette p2, Palette p3, Palette p4)
+        public PaletteGroup(Palette p1, Palette p2, Palette p3, Palette p4) : base(p1)
         {
-            Palettes = new Palette[4] { p1, p2, p3, p4 };
         }
 
-        public Palette Get(Value4 value)
+        public PrecisionAddress GetColorAddress(Value2 palette, byte color)
         {
-            return Palettes[value];
+            var paletteAddress = GetAddress(palette.Value);
+            return new PrecisionAddress(paletteAddress.Address, paletteAddress.BitOffset + (6 * color));
         }
     }
 }

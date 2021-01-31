@@ -3,11 +3,15 @@ using GlitchGame.GameMain.Memory;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
 
 namespace GlitchGame.GameMain.Graphics
 {
     public class RenderEngine
     {
+        private Stopwatch _stopwatch = new Stopwatch();
+        private long _lastPixelDrawTicks;
+
         public SpriteBatch SpriteBatch { get; }
         private readonly Texture2D _systemPalette;
         private readonly RenderGun _renderGun;
@@ -42,20 +46,21 @@ namespace GlitchGame.GameMain.Graphics
         private void GetSpritesOnCurrentScanline()
         {
             int scanlineSpriteIndex = 0;
-
-            for (int i = 0; i < _systemMemory.VideoMemory.Sprites.MaxSprites; i++)
+            for (int i = 0; i < _systemMemory.VideoMemory.Sprites.Length; i++)
             {
                 var sprite = _systemMemory.VideoMemory.Sprites.Get(i);
-                if(sprite != null && _renderGun.Y >= sprite.Y && _renderGun.Y < sprite.Y + sprite.Height)
+                if (sprite != null && _renderGun.Y >= sprite.Y && _renderGun.Y < sprite.Y + sprite.Height)
                 {
                     _scanlineSprites[scanlineSpriteIndex] = sprite;
                     scanlineSpriteIndex++;
+                    if (scanlineSpriteIndex >= _scanlineSprites.Length)
+                        break;
                 }
             }
 
-            while(scanlineSpriteIndex < _scanlineSprites.Length)    
+            while (scanlineSpriteIndex < _scanlineSprites.Length)
                 _scanlineSprites[scanlineSpriteIndex++] = null;
-            
+
         }
 
         private void DrawNextPixel()
@@ -63,18 +68,17 @@ namespace GlitchGame.GameMain.Graphics
             var renderGunX = _renderGun.X;
             var renderGunY = _renderGun.Y;
 
-            _renderGun.Palette = _systemMemory.VideoMemory.BgLayer.Palette;
-            _renderGun.Color = _systemMemory.VideoMemory.BgLayer.GetColorAtScreenPoint(_systemMemory.VideoMemory.Tiles, renderGunX, renderGunY);
+            var bgColor = _systemMemory.VideoMemory.BgLayer.GetColorAtScreenPoint(_systemMemory.VideoMemory.Tiles, renderGunX, renderGunY);
+            _renderGun.ColorAddress = _systemMemory.VideoMemory.Palettes.GetColorAddress(_systemMemory.VideoMemory.BgLayer.Palette, bgColor);
 
             for (int i = 0; i < _scanlineSprites.Length; i++)
             {
                 if (_scanlineSprites[i] != null && _scanlineSprites[i].HitTest(renderGunX, renderGunY))
                 {
                     var color = _scanlineSprites[i].GetColorAtScreenPoint(_systemMemory.VideoMemory.Tiles, renderGunX, renderGunY);
-                    if (color.Value > 0)
+                    if (color > 0)
                     {
-                        _renderGun.Palette = _scanlineSprites[i].Palette;
-                        _renderGun.Color = color;
+                        _renderGun.ColorAddress = _systemMemory.VideoMemory.Palettes.GetColorAddress(_scanlineSprites[i].Attributes.Palette, color);
                         break;
                     }
                 }
@@ -82,19 +86,17 @@ namespace GlitchGame.GameMain.Graphics
 
             var srcPixel = GetNextSourcePixel();
             var screenPixel = GetNextScreenPixel();
-            SpriteBatch.Draw(_systemPalette, screenPixel, srcPixel, Color.White);
+            SpriteBatch.Draw(_systemPalette, screenPixel, srcPixel, Color.White);         
         }
 
         private Rectangle GetNextSourcePixel()
         {
-            var color = _systemMemory.VideoMemory.Palettes
-                .Get(_renderGun.Palette)
-                .Get(_renderGun.Color);
+            var color = SystemBinaryData.ReadAt(_renderGun.ColorAddress, 6);
 
-            if (color.Value == 0)
+            if (color == 0)
                 return Rectangle.Empty;
 
-            var srcPoint = color.Value.IndexToPoint(16);
+            var srcPoint = color.IndexToPoint(16);
             return srcPoint.ToRectangle(32);
         }
 
@@ -110,9 +112,7 @@ namespace GlitchGame.GameMain.Graphics
         public byte X { get; private set; }
         public byte Y { get; private set; }
 
-        public Value4 Palette { get; set; }
-
-        public Value4 Color { get; set; }
+        public PrecisionAddress ColorAddress { get; set; }
 
         public void Move()
         {

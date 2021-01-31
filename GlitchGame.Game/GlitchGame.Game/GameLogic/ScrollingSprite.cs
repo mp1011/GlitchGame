@@ -8,7 +8,7 @@ namespace GlitchGame.GameMain.GameLogic
 
         public int WorldY { get; set; }
 
-        public Value64 SpriteIndex { get; set; }
+        public Value6 SpriteIndex { get; set; }
 
         public void Update(SystemMemory systemMemory)
         {
@@ -18,8 +18,8 @@ namespace GlitchGame.GameMain.GameLogic
             //todo
             var screenY = WorldY;
 
-            systemMemory.VideoMemory.Sprites.Get(SpriteIndex).X = (byte)screenX; //todo, overflow
-            systemMemory.VideoMemory.Sprites.Get(SpriteIndex).Y = (byte)screenY; //todo, overflow
+            systemMemory.VideoMemory.Sprites.Get(SpriteIndex.Value).X = (byte)screenX; //todo, overflow
+            systemMemory.VideoMemory.Sprites.Get(SpriteIndex.Value).Y = (byte)screenY; //todo, overflow
 
         }
     }

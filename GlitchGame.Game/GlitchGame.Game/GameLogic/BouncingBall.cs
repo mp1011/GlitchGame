@@ -4,7 +4,7 @@ namespace GlitchGame.GameMain.GameLogic
 {
     class BouncingBall
     {
-        public Value64 SpriteIndex { get; set; }
+        public Value6 SpriteIndex { get; set; }
 
         public byte XSpeed { get; set; }
         public byte YSpeed { get; set; }
@@ -54,8 +54,8 @@ namespace GlitchGame.GameMain.GameLogic
                 YPosition = 0;
             }
 
-            systemMemory.VideoMemory.Sprites.Get(SpriteIndex).X = (byte)XPosition; //todo, overflow
-            systemMemory.VideoMemory.Sprites.Get(SpriteIndex).Y = (byte)YPosition; //todo, overflow
+            systemMemory.VideoMemory.Sprites.Get(SpriteIndex.Value).X = (byte)XPosition; //todo, overflow
+            systemMemory.VideoMemory.Sprites.Get(SpriteIndex.Value).Y = (byte)YPosition; //todo, overflow
         }
     }
 }

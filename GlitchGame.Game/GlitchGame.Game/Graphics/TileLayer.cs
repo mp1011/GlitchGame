@@ -1,11 +1,12 @@
-﻿using GlitchGame.GameMain.Memory;
+﻿using GlitchGame.GameMain.Extensions;
+using GlitchGame.GameMain.Memory;
 
 namespace GlitchGame.GameMain.Graphics
 {
     public class TileLayer
     {
         public TileMap TileMap { get; }
-        public Value4 Palette { get; set; }
+        public Value2 Palette { get; set; }
 
         public byte XOffset { get; set; }
 
@@ -13,14 +14,26 @@ namespace GlitchGame.GameMain.Graphics
 
         public TileLayer()
         {
-            TileMap = new TileMap(0, 0, new TileIndex[3840*2], 64);
+            TileMap = new TileMap(new ByteValue(), new ByteValue(), new BackgroundTileGrid(new TileIndex()));
         }
 
-        public Value4 GetColorAtScreenPoint(TileSet tileSet, byte screenX, byte screenY)
+        public byte GetColorAtScreenPoint(TileSet tileSet, byte screenX, byte screenY)
         {
             var x = screenX + XOffset;
             var y = screenY + YOffset;
-            return TileMap.GetColorAtPoint(tileSet, x, y);
+            return TileMap.Tiles.GetColorAtPoint(tileSet, x, y);
         }
+    }
+
+    public class BackgroundTileGrid : Grid<TileIndex>
+    {
+        public BackgroundTileGrid(params TileIndex[] items) : base(items)
+        {
+        }
+
+        public override int Columns => 34;
+        public override int Rows => 32;
+
+
     }
 }
